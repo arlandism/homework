@@ -9,6 +9,9 @@
             #(not (nil? %))
               (map #(find-node predicate %) (:children tree)))))))
 
+(defn find-all [predicate tree]
+  #{})
+
 (defn find-node-custom [predicate get-children tree]
   (if (predicate tree)
     tree
