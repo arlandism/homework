@@ -10,7 +10,14 @@
               (map #(find-node predicate %) (:children tree)))))))
 
 (defn find-all [predicate tree]
-  #{})
+  (reduce
+    (fn [matches potential-match]
+      (let [children (:children potential-match)]
+        (if (predicate potential-match)
+          (into matches potential-match)
+          (find-all predicate children))))
+      #{}
+      (if (vector? tree) tree [tree])))
 
 (defn find-node-custom [predicate get-children tree]
   (if (predicate tree)
