@@ -53,7 +53,7 @@
   (it "Finds the grandchild with contents of '5'"
     (should=
       [5 [81]]
-      (find-node-custom #(= (first %) 5) rest @tree))))
+      (find-node #(= (first %) 5) rest @tree))))
 
 (describe "BONUS ROUND:  can make assertions on the path it took to get to a node"
   (with tree [1

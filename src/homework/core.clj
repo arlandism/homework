@@ -1,13 +1,21 @@
 (ns homework.core)
 
-(defn find-node [predicate tree]
-    (if (predicate tree)
-      tree
-      (when tree
-        (first 
-          (filter
-            #(not (nil? %))
-              (map #(find-node predicate %) (:children tree)))))))
+(defn find-node 
+  ([predicate tree]
+  (find-node predicate :children tree))
+
+  ([predicate get-children tree]
+  (if (predicate tree)
+    tree
+  (let [children (get-children tree)]
+    (when children
+     (first
+       (filter 
+       #(not (nil? %))
+       (map
+         (fn [tree] 
+           (find-node predicate get-children tree))
+         children))))))))
 
 (defn find-all [predicate tree]
   (reduce
@@ -18,19 +26,6 @@
           (find-all predicate children))))
       #{}
       (if (vector? tree) tree [tree])))
-
-(defn find-node-custom [predicate get-children tree]
-  (if (predicate tree)
-    tree
-  (let [children (get-children tree)]
-    (when children
-     (first
-       (filter 
-       #(not (nil? %))
-       (map
-         (fn [tree] 
-           (find-node-custom predicate get-children tree))
-         children)))))))
 
 (defn find-node-with-path [path-so-far path-predicate get-children tree]
   (if (path-predicate path-so-far)
